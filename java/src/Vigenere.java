@@ -6,34 +6,32 @@ import java.util.regex.Matcher;
 /**
  * Created by postmordum on 6/29/15.
  */
-public class Cesar {
-    String encrypt(String cypher,String text){
-        //String text = body;
+public class Vigenere {
+    String encrypt(String key,String text){
         int kp = 0;
         String encrypt = "";
         for(int i=0;i<text.length();i++){
-            if(kp >= cypher.length()){
+            if(kp >= key.length()){
                 kp = 0;
             }
             char t = text.charAt(i);
-            char c = cypher.charAt(kp++);
+            char c = key.charAt(kp++);
             char e = this.shiftForward(c,t);
             //System.out.println(t+":"+c+":"+e);
             encrypt += e;
         }
         return encrypt;
     }
-    String decrypt(String cypher,String text){
+    String decrypt(String key,String text){
         int kp = 0;
         String decrypt = "";
         for(int i=0;i<text.length();i++){
-            if(kp >= cypher.length()){
+            if(kp >= key.length()){
                 kp = 0;
             }
             char t = text.charAt(i);
-            char c = cypher.charAt(kp++);
+            char c = key.charAt(kp++);
             char d = this.shiftBackword(c,t);
-            //System.out.println(t+":"+c+":"+d);
             decrypt += d;
         }
         return decrypt;
