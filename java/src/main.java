@@ -1,9 +1,10 @@
 
-import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -78,10 +79,24 @@ public class main{
             password = scanner.next();
         }
         if(input_file_name != null){
-            File input_file = new File(input_file_name);
-            if(input_file.exists()){
+            if(Files.notExists(Paths.get(input_file_name))){
+                System.out.println("File "+input_file_name+" does not exist.");
+                return;
+            }else{
+                try{
+                    List<String> lines = Files.readAllLines(Paths.get(input_file_name),StandardCharsets.UTF_8);
+	                Iterator<String> iterator = lines.iterator();
+	                input_text = "";
+                    while(iterator.hasNext()){
+                        input_text += iterator.next();
+                        if(iterator.hasNext()){
+                            input_text += "\n";
+                        }
+                    }
+                }catch(IOException exception){
+                    //TODO handle IO exceptions
+                }
             }
-            //List<String> lines = Files.readAllLines(Paths.get("path to file"), StandardCharsets.UTF_8);
         }
         if(input_text == null){
             System.out.println("Please enter a text, then press enter. For multi line text please use an input file with the -i option.");
@@ -99,6 +114,14 @@ public class main{
         if(output_file_name == null){
             System.out.println(output);
         }else{
+            if(Files.notExists(Paths.get(output_file_name))){
+                try{
+                    Files.createFile(Paths.get(output_file_name));
+                    Files.write(Paths.get(output_file_name),output.getBytes());
+                }catch(IOException exception){
+                    //TODO handle IO exceptions
+                }
+            }
         }
     }
     public static void test0(String key,String text){
